@@ -133,22 +133,24 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-background">
-      <div
-        ref={containerRef}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        className={`w-full h-full transition-all duration-300 ease-out ${
-          transitionDirection === 'left' ? '-translate-x-full opacity-0' :
-          transitionDirection === 'right' ? 'translate-x-full opacity-0' :
-          'translate-x-0 opacity-100'
-        }`}
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)', paddingTop: 'env(safe-area-inset-top)' }}
-      >
-        <div className="max-w-2xl mx-auto h-full flex items-center justify-center px-4">
-          <div className="w-full bg-card rounded-2xl shadow-lg overflow-visible" style={{ boxShadow: '0 4px 12px rgba(41, 53, 86, 0.08)' }}>
-            {renderCard()}
+    <>
+      <div className="relative w-full h-screen overflow-hidden bg-background">
+        <div
+          ref={containerRef}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className={`w-full h-full transition-all duration-300 ease-out ${
+            transitionDirection === 'left' ? '-translate-x-full opacity-0' :
+            transitionDirection === 'right' ? 'translate-x-full opacity-0' :
+            'translate-x-0 opacity-100'
+          }`}
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)', paddingTop: 'env(safe-area-inset-top)' }}
+        >
+          <div className="max-w-2xl mx-auto h-full flex items-center justify-center px-4">
+            <div className="w-full bg-card rounded-2xl shadow-lg overflow-visible" style={{ boxShadow: '0 4px 12px rgba(41, 53, 86, 0.08)' }}>
+              {renderCard()}
+            </div>
           </div>
         </div>
       </div>
@@ -161,6 +163,6 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
       />
 
       <ProgressIndicator current={currentIndex + 1} total={totalCards} />
-    </div>
+    </>
   );
 }
