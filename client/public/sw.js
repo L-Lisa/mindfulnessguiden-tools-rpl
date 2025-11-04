@@ -81,20 +81,23 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Activate event - cleanup old caches
+// Activate event - FORCE DELETE ALL OLD CACHES (critical for Safari)
 self.addEventListener('activate', (event) => {
+  console.log('SW v3: Activating and clearing all old caches');
   const cacheWhitelist = [STATIC_CACHE_NAME, DYNAMIC_CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('SW: Deleting old cache:', cacheName);
+            console.log('SW v3: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      console.log('SW v3: Taking control of all pages');
+      return self.clients.claim();
     })
   );
-  self.clients.claim();
 });
