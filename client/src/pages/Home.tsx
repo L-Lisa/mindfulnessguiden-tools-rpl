@@ -10,6 +10,7 @@ export default function Home() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [completed, setCompleted] = useState<number[]>([]);
 
+  // Load exercises and initial state
   useEffect(() => {
     const loadExercises = async () => {
       try {
@@ -19,8 +20,6 @@ export default function Home() {
         }
         const data = await response.json();
         setExercises(data.exercises);
-        setFavorites(getFavorites());
-        setCompleted(getCompleted());
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load exercises:", error);
@@ -29,6 +28,9 @@ export default function Home() {
     };
 
     loadExercises();
+    // Load favorites and completed from localStorage once
+    setFavorites(getFavorites());
+    setCompleted(getCompleted());
   }, []);
 
   const handleFavoriteToggle = () => {

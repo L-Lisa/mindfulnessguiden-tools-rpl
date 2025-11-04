@@ -368,11 +368,22 @@
     font-size: 20px;
   }
 
-  /* High Contrast Theme */
+  /* High Contrast Theme - Light Mode */
   html[data-theme="high-contrast"] {
     --foreground: 227 24% 10%; /* Darker navy */
     --muted-foreground: 227 24% 30%;
     --border: 227 24% 70%;
     --card-border: 227 24% 70%;
+  }
+
+  /* High Contrast Theme - Dark Mode */
+  .dark[data-theme="high-contrast"] {
+    --background: 227 24% 5%; /* Almost black */
+    --foreground: 0 0% 98%; /* Almost white */
+    --card: 227 24% 8%; /* Very dark */
+    --card-foreground: 0 0% 98%;
+    --muted-foreground: 0 0% 85%; /* Lighter secondary text */
+    --border: 227 18% 35%; /* Higher contrast borders */
+    --card-border: 227 18% 35%;
   }
 }

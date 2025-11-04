@@ -3,13 +3,7 @@
 const STORAGE_KEYS = {
   FAVORITES: 'mindfulness_favorites',
   COMPLETED: 'mindfulness_completed',
-  SETTINGS: 'mindfulness_settings',
 } as const;
-
-export interface UserSettings {
-  fontSize: 'small' | 'medium' | 'large';
-  theme: 'default';
-}
 
 // Favorites
 export function getFavorites(): number[] {
@@ -72,19 +66,4 @@ export function isCompleted(exerciseId: number): boolean {
 export function getCompletionPercentage(totalExercises: number): number {
   const completed = getCompleted().length;
   return totalExercises > 0 ? Math.round((completed / totalExercises) * 100) : 0;
-}
-
-// Settings
-export function getSettings(): UserSettings {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return stored ? JSON.parse(stored) : { fontSize: 'medium', theme: 'default' };
-  } catch (error) {
-    console.error('Failed to parse settings from localStorage:', error);
-    return { fontSize: 'medium', theme: 'default' };
-  }
-}
-
-export function saveSettings(settings: UserSettings): void {
-  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import type { Exercise } from "@shared/schema";
 import { CoverCard } from "./CoverCard";
 import { ExerciseCard } from "./ExerciseCard";
@@ -28,6 +28,38 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalCards - 1;
 
+  // Deep linking - navigate to exercise from hash
+  useEffect(() => {
+    if (exercises.length === 0) return; // Wait for exercises to load
+    
+    const navigateToHash = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#exercise-')) {
+        const exerciseId = parseInt(hash.replace('#exercise-', ''), 10);
+        if (!isNaN(exerciseId)) {
+          // Find the index of the exercise with this ID
+          const exerciseIndex = exercises.findIndex(ex => ex.id === exerciseId);
+          if (exerciseIndex !== -1) {
+            // +1 because index 0 is the cover card
+            setCurrentIndex(exerciseIndex + 1);
+            // Clear hash after navigation
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        }
+      }
+    };
+
+    // Navigate on initial load
+    navigateToHash();
+    
+    // Listen for hash changes during session
+    window.addEventListener('hashchange', navigateToHash);
+    
+    return () => {
+      window.removeEventListener('hashchange', navigateToHash);
+    };
+  }, [exercises]); // Re-run when exercises load
+  
   // Clamp currentIndex when exercises array changes (e.g., filtering favorites)
   useEffect(() => {
     if (currentIndex >= totalCards) {
@@ -38,7 +70,7 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   // Minimum swipe distance (in px)
   const minSwipeDistance = 50;
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (canGoPrevious && !isTransitioning) {
       setIsTransitioning(true);
       setTransitionDirection('right');
@@ -48,9 +80,9 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
         setTransitionDirection(null);
       }, 300);
     }
-  };
+  }, [canGoPrevious, isTransitioning, currentIndex]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (canGoNext && !isTransitioning) {
       setIsTransitioning(true);
       setTransitionDirection('left');
@@ -60,7 +92,7 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
         setTransitionDirection(null);
       }, 300);
     }
-  };
+  }, [canGoNext, isTransitioning, currentIndex]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -100,7 +132,7 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex]);
+  }, [handlePrevious, handleNext]);
 
   // Render current card
   const renderCard = () => {

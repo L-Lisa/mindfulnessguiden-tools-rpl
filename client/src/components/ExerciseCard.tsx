@@ -19,26 +19,20 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
   const { toast } = useToast();
 
   useEffect(() => {
-    if (exercise?.id) {
-      setFavorited(isFavorite(exercise.id));
-      setCompleted(isCompleted(exercise.id));
-    }
-  }, [exercise?.id]);
+    setFavorited(isFavorite(exercise.id));
+    setCompleted(isCompleted(exercise.id));
+  }, [exercise.id]);
 
   const handleFavoriteClick = () => {
-    if (exercise?.id) {
-      const newState = toggleFavorite(exercise.id);
-      setFavorited(newState);
-      onFavoriteToggle();
-    }
+    const newState = toggleFavorite(exercise.id);
+    setFavorited(newState);
+    onFavoriteToggle();
   };
 
   const handleCompletionClick = () => {
-    if (exercise?.id) {
-      const newState = toggleCompleted(exercise.id);
-      setCompleted(newState);
-      onCompletionToggle();
-    }
+    const newState = toggleCompleted(exercise.id);
+    setCompleted(newState);
+    onCompletionToggle();
   };
 
   const handleShare = async () => {

@@ -51,6 +51,19 @@ export function Timer({ durationStr, exerciseId }: TimerProps) {
     };
   }, [isPlaying, totalSeconds]);
 
+  // Reset timer when exercise changes (user navigates to different card)
+  useEffect(() => {
+    setIsPlaying(false);
+    setElapsedSeconds(0);
+    lastChimeRef.current = 0;
+    
+    // Cleanup any running interval from previous exercise
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, [exerciseId]);
+
   const handlePlayPause = () => {
     if (!isPlaying && elapsedSeconds === 0) {
       playStartChime();
