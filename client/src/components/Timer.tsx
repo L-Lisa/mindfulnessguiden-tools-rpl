@@ -103,7 +103,7 @@ export function Timer({ durationStr, exerciseId }: TimerProps) {
         <div className="flex gap-2">
           <button
             onClick={handlePlayPause}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground hover-elevate active-elevate-2 transition-all"
+            className="flex items-center justify-center w-11 h-11 rounded-full bg-primary text-primary-foreground hover-elevate active-elevate-2 transition-all"
             aria-label={isPlaying ? "Pausa" : "Spela"}
             data-testid="button-timer-play-pause"
           >
@@ -116,7 +116,7 @@ export function Timer({ durationStr, exerciseId }: TimerProps) {
           
           <button
             onClick={handleReset}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-foreground hover-elevate active-elevate-2 transition-all"
+            className="flex items-center justify-center w-11 h-11 rounded-full bg-muted text-foreground hover-elevate active-elevate-2 transition-all"
             aria-label="Återställ"
             data-testid="button-timer-reset"
           >

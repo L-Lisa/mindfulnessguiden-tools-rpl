@@ -332,10 +332,12 @@
 
   /* High Contrast Theme - Light Mode */
   html[data-theme="high-contrast"] {
-    --foreground: 227 24% 10%; /* Darker navy */
-    --muted-foreground: 227 24% 30%;
-    --border: 227 24% 70%;
-    --card-border: 227 24% 70%;
+    --foreground: 0 0% 0%; /* Pure black for maximum contrast */
+    --card-foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 20%; /* Dark gray for secondary text */
+    --border: 0 0% 40%; /* Darker borders */
+    --card-border: 0 0% 40%;
+    --primary: 227 60% 20%; /* Darker, more saturated navy */
   }
 
   /* High Contrast Theme - Dark Mode */
