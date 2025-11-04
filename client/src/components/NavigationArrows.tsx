@@ -26,11 +26,11 @@ export function NavigationArrows({
             transform: 'translateY(-50%)',
             zIndex: 60
           }}
-          className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/90 text-primary-foreground shadow-lg transition-all duration-200 hover-elevate active-elevate-2 cursor-pointer"
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/20 backdrop-blur-md border-2 border-primary/40 text-primary shadow-md transition-all duration-200 hover-elevate active-elevate-2 cursor-pointer hover:bg-primary/30 hover:border-primary/60"
           aria-label="Föregående kort"
           data-testid="button-previous"
         >
-          <ChevronLeft className="w-7 h-7" />
+          <ChevronLeft className="w-7 h-7 stroke-[2.5]" />
         </button>
       )}
 
@@ -45,11 +45,11 @@ export function NavigationArrows({
             transform: 'translateY(-50%)',
             zIndex: 60
           }}
-          className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/90 text-primary-foreground shadow-lg transition-all duration-200 hover-elevate active-elevate-2 cursor-pointer"
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/20 backdrop-blur-md border-2 border-primary/40 text-primary shadow-md transition-all duration-200 hover-elevate active-elevate-2 cursor-pointer hover:bg-primary/30 hover:border-primary/60"
           aria-label="Nästa kort"
           data-testid="button-next"
         >
-          <ChevronRight className="w-7 h-7" />
+          <ChevronRight className="w-7 h-7 stroke-[2.5]" />
         </button>
       )}
     </>
