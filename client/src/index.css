@@ -15,23 +15,23 @@
   --elevate-2: rgba(0,0,0, .08);
 
   /* Mindfulness brand colors */
-  --background: 42 30% 96%; /* Cream #F6F4EA */
+  --background: 42 12% 98%; /* Lighter, less yellow cream */
 
   --foreground: 227 24% 26%; /* Navy #293556 */
 
-  --border: 227 24% 88%;
+  --border: 227 24% 90%;
 
-  --card: 42 30% 96%; /* Cream for cards */
+  --card: 42 8% 97%; /* Very light cream for cards */
 
   --card-foreground: 227 24% 26%; /* Navy text */
 
-  --card-border: 42 30% 90%;
+  --card-border: 42 10% 92%;
 
-  --sidebar: 42 30% 94%;
+  --sidebar: 42 10% 96%;
 
   --sidebar-foreground: 227 24% 26%;
 
-  --sidebar-border: 42 30% 86%;
+  --sidebar-border: 42 12% 88%;
 
   --sidebar-primary: 227 24% 26%;
 
@@ -43,11 +43,11 @@
 
   --sidebar-ring: 227 24% 26%;
 
-  --popover: 42 30% 96%;
+  --popover: 42 8% 98%;
 
   --popover-foreground: 227 24% 26%;
 
-  --popover-border: 42 30% 90%;
+  --popover-border: 42 10% 92%;
 
   --primary: 227 24% 26%; /* Navy primary */
 
