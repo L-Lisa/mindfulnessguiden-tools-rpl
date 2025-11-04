@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import type { Exercise } from "@shared/schema";
-import { Heart, CheckCircle2, Circle } from "lucide-react";
+import { Heart, CheckCircle2, Circle, Share2 } from "lucide-react";
 import { toggleFavorite, isFavorite, toggleCompleted, isCompleted } from "@/lib/localStorage";
+import { shareExercise } from "@/lib/share";
+import { useToast } from "@/hooks/use-toast";
 import { Timer } from "./Timer";
 import logoUrl from "@assets/logo_transparent_1762257242802.webp";
 
@@ -14,6 +16,7 @@ interface ExerciseCardProps {
 export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }: ExerciseCardProps) {
   const [favorited, setFavorited] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (exercise?.id) {
@@ -35,6 +38,32 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
       const newState = toggleCompleted(exercise.id);
       setCompleted(newState);
       onCompletionToggle();
+    }
+  };
+
+  const handleShare = async () => {
+    if (!exercise) return;
+
+    const result = await shareExercise(exercise);
+    
+    if (result.success) {
+      if (result.method === 'clipboard') {
+        toast({
+          title: "Kopierat!",
+          description: "Övningen har kopierats till urklipp",
+        });
+      } else if (result.method === 'share') {
+        toast({
+          title: "Delat!",
+          description: "Övningen har delats",
+        });
+      }
+    } else if (result.method !== 'cancelled') {
+      toast({
+        title: "Delning misslyckades",
+        description: "Din webbläsare stöder inte delning eller urklipp. Prova en annan webbläsare.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -90,6 +119,16 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
         ) : (
           <Circle className="w-6 h-6 text-foreground" />
         )}
+      </button>
+
+      {/* Share Button */}
+      <button
+        onClick={handleShare}
+        className="absolute top-28 left-4 flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm bg-foreground/10 transition-all hover-elevate active-elevate-2"
+        aria-label="Dela övning"
+        data-testid={`button-share-${exercise.id}`}
+      >
+        <Share2 className="w-6 h-6 text-foreground" />
       </button>
 
       {/* Content Container - Scrollable */}
