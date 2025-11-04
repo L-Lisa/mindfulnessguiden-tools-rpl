@@ -22,7 +22,7 @@ export function NavigationArrows({
           style={{
             position: 'fixed',
             left: '1.5rem',
-            top: '50%',
+            top: '75%',
             transform: 'translateY(-50%)',
             zIndex: 60
           }}
@@ -41,7 +41,7 @@ export function NavigationArrows({
           style={{
             position: 'fixed',
             right: '1.5rem',
-            top: '50%',
+            top: '75%',
             transform: 'translateY(-50%)',
             zIndex: 60
           }}

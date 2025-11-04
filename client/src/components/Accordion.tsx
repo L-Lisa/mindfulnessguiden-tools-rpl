@@ -26,10 +26,10 @@ export function Accordion({ trigger, children }: AccordionProps) {
       
       <div
         className={`overflow-hidden transition-all duration-250 ease-in-out ${
-          isOpen ? 'max-h-[800px] opacity-100 mt-4' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-[600px] opacity-100 mt-4' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto max-h-[550px] pr-2">
           {children}
         </div>
       </div>

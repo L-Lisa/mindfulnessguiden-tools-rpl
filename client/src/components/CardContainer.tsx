@@ -212,8 +212,8 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
             touchAction: 'pan-y pinch-zoom'
           }}
         >
-          <div className="max-w-2xl mx-auto h-full flex items-center justify-center px-4">
-            <div className="w-full bg-card rounded-2xl shadow-lg overflow-visible" style={{ boxShadow: '0 4px 12px rgba(41, 53, 86, 0.08)' }}>
+          <div className="max-w-2xl mx-auto h-full flex items-start justify-center px-4 py-4 overflow-y-auto">
+            <div className="w-full bg-card rounded-2xl shadow-lg overflow-hidden max-h-full" style={{ boxShadow: '0 4px 12px rgba(41, 53, 86, 0.08)' }}>
               {renderCard()}
             </div>
           </div>

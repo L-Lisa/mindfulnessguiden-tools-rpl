@@ -67,10 +67,10 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
   }
 
   return (
-    <div className="flex flex-col h-full min-h-[70vh] p-6 relative">
+    <div className="flex flex-col h-full max-h-screen p-6 relative overflow-y-auto">
       {/* Completion Badge */}
       {completed && (
-        <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-full shadow-md" data-testid={`badge-completed-${exercise.id}`}>
+        <div className="sticky top-0 right-0 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-full shadow-md ml-auto mb-2 w-fit" data-testid={`badge-completed-${exercise.id}`}>
           <CheckCircle2 className="w-4 h-4" />
           <span className="text-xs font-medium">Slutförd</span>
         </div>
@@ -78,55 +78,58 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
 
       {/* Watermark */}
       {!completed && (
-        <div className="absolute top-4 right-4 text-xs text-muted-foreground" data-testid="text-watermark">
+        <div className="sticky top-0 right-0 text-xs text-muted-foreground ml-auto mb-2 w-fit" data-testid="text-watermark">
           mindfulnessguiden.se
         </div>
       )}
 
-      {/* Favorite Button */}
-      <button
-        onClick={handleFavoriteClick}
-        className={`absolute top-4 left-4 flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
-          favorited ? 'bg-red-500/20' : 'bg-foreground/10'
-        }`}
-        aria-label={favorited ? "Ta bort från favoriter" : "Lägg till i favoriter"}
-        data-testid={`button-favorite-${exercise.id}`}
-      >
-        <Heart 
-          className={`w-6 h-6 transition-all ${
-            favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
+      {/* Action Buttons - Sticky on left */}
+      <div className="sticky top-0 left-0 flex flex-col gap-2 mb-4">
+        {/* Favorite Button */}
+        <button
+          onClick={handleFavoriteClick}
+          className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
+            favorited ? 'bg-red-500/20' : 'bg-foreground/10'
           }`}
-        />
-      </button>
+          aria-label={favorited ? "Ta bort från favoriter" : "Lägg till i favoriter"}
+          data-testid={`button-favorite-${exercise.id}`}
+        >
+          <Heart 
+            className={`w-6 h-6 transition-all ${
+              favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
+            }`}
+          />
+        </button>
 
-      {/* Completion Button */}
-      <button
-        onClick={handleCompletionClick}
-        className={`absolute top-16 left-4 flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
-          completed ? 'bg-green-500/20' : 'bg-foreground/10'
-        }`}
-        aria-label={completed ? "Markera som ej slutförd" : "Markera som slutförd"}
-        data-testid={`button-complete-${exercise.id}`}
-      >
-        {completed ? (
-          <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-600" />
-        ) : (
-          <Circle className="w-6 h-6 text-foreground" />
-        )}
-      </button>
+        {/* Completion Button */}
+        <button
+          onClick={handleCompletionClick}
+          className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
+            completed ? 'bg-green-500/20' : 'bg-foreground/10'
+          }`}
+          aria-label={completed ? "Markera som ej slutförd" : "Markera som slutförd"}
+          data-testid={`button-complete-${exercise.id}`}
+        >
+          {completed ? (
+            <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-600" />
+          ) : (
+            <Circle className="w-6 h-6 text-foreground" />
+          )}
+        </button>
 
-      {/* Share Button */}
-      <button
-        onClick={handleShare}
-        className="absolute top-28 left-4 flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm bg-foreground/10 transition-all hover-elevate active-elevate-2"
-        aria-label="Dela övning"
-        data-testid={`button-share-${exercise.id}`}
-      >
-        <Share2 className="w-6 h-6 text-foreground" />
-      </button>
+        {/* Share Button */}
+        <button
+          onClick={handleShare}
+          className="flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm bg-foreground/10 transition-all hover-elevate active-elevate-2"
+          aria-label="Dela övning"
+          data-testid={`button-share-${exercise.id}`}
+        >
+          <Share2 className="w-6 h-6 text-foreground" />
+        </button>
+      </div>
 
-      {/* Content Container - Scrollable */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-8 space-y-6 overflow-y-auto">
+      {/* Content Container */}
+      <div className="flex-1 flex flex-col items-center justify-start space-y-6">
         {/* Exercise Name */}
         <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground leading-tight" data-testid={`text-exercise-name-${exercise.id}`}>
           {exercise.name}
@@ -146,7 +149,7 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
       </div>
 
       {/* Logo at Bottom */}
-      <div className="flex justify-center items-end pt-6 pb-2" data-testid="img-logo-bottom">
+      <div className="flex justify-center items-center pt-6 pb-2 mt-auto" data-testid="img-logo-bottom">
         <img
           src={logoUrl}
           alt="Mindfulnessguiden"
