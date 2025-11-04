@@ -38,9 +38,12 @@ A Progressive Web App providing Swedish mindfulness practitioners with a portabl
 - **Navigation Arrows**: iOS-style chevrons at 75% from top on left/right edges
 - **Keyboard**: Arrow keys for desktop navigation
 - **Progress Indicator**: Shows "X/Y" format (e.g. "1/11") in bottom-right corner
-- **Action Buttons**: Horizontal row of three buttons (favorite, complete, share) in top-left
+- **Top Header Row**: Single sticky row with perfect vertical alignment
+  - Left side: Three action buttons (favorite, complete, share) in horizontal row
+  - Right side: Watermark ("mindfulnessguiden.se") or completion badge ("Slutförd")
   - Button size: 44×44px (iOS HIG compliant touch targets)
   - Icon size: 20×20px for cleaner appearance
+  - Layout: `flex items-center justify-between` for perfect alignment
 
 ## PWA Configuration
 - **Service Worker**: Manual implementation in `client/public/sw.js`

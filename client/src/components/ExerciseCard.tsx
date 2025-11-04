@@ -68,64 +68,64 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
 
   return (
     <div className="flex flex-col min-h-[70vh] p-6 relative">
-      {/* Completion Badge */}
-      {completed && (
-        <div className="sticky top-0 right-0 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-full shadow-md ml-auto mb-2 w-fit" data-testid={`badge-completed-${exercise.id}`}>
-          <CheckCircle2 className="w-4 h-4" />
-          <span className="text-xs font-medium">Slutförd</span>
-        </div>
-      )}
-
-      {/* Watermark */}
-      {!completed && (
-        <div className="sticky top-0 right-0 text-xs text-muted-foreground ml-auto mb-2 w-fit" data-testid="text-watermark">
-          mindfulnessguiden.se
-        </div>
-      )}
-
-      {/* Action Buttons - Sticky on top, horizontal */}
-      <div className="sticky top-0 left-0 flex flex-row gap-2 mb-4">
-        {/* Favorite Button */}
-        <button
-          onClick={handleFavoriteClick}
-          className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
-            favorited ? 'bg-red-500/20' : 'bg-foreground/10'
-          }`}
-          aria-label={favorited ? "Ta bort från favoriter" : "Lägg till i favoriter"}
-          data-testid={`button-favorite-${exercise.id}`}
-        >
-          <Heart 
-            className={`w-5 h-5 transition-all ${
-              favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
+      {/* Top Row: Action Buttons + Watermark/Badge */}
+      <div className="sticky top-0 left-0 right-0 flex items-center justify-between mb-4">
+        {/* Action Buttons - Left side */}
+        <div className="flex flex-row items-center gap-2">
+          {/* Favorite Button */}
+          <button
+            onClick={handleFavoriteClick}
+            className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
+              favorited ? 'bg-red-500/20' : 'bg-foreground/10'
             }`}
-          />
-        </button>
+            aria-label={favorited ? "Ta bort från favoriter" : "Lägg till i favoriter"}
+            data-testid={`button-favorite-${exercise.id}`}
+          >
+            <Heart 
+              className={`w-5 h-5 transition-all ${
+                favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
+              }`}
+            />
+          </button>
 
-        {/* Completion Button */}
-        <button
-          onClick={handleCompletionClick}
-          className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
-            completed ? 'bg-green-500/20' : 'bg-foreground/10'
-          }`}
-          aria-label={completed ? "Markera som ej slutförd" : "Markera som slutförd"}
-          data-testid={`button-complete-${exercise.id}`}
-        >
-          {completed ? (
-            <CheckCircle2 className="w-5 h-5 text-green-600 fill-green-600" />
-          ) : (
-            <Circle className="w-5 h-5 text-foreground" />
-          )}
-        </button>
+          {/* Completion Button */}
+          <button
+            onClick={handleCompletionClick}
+            className={`flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
+              completed ? 'bg-green-500/20' : 'bg-foreground/10'
+            }`}
+            aria-label={completed ? "Markera som ej slutförd" : "Markera som slutförd"}
+            data-testid={`button-complete-${exercise.id}`}
+          >
+            {completed ? (
+              <CheckCircle2 className="w-5 h-5 text-green-600 fill-green-600" />
+            ) : (
+              <Circle className="w-5 h-5 text-foreground" />
+            )}
+          </button>
 
-        {/* Share Button */}
-        <button
-          onClick={handleShare}
-          className="flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm bg-foreground/10 transition-all hover-elevate active-elevate-2"
-          aria-label="Dela övning"
-          data-testid={`button-share-${exercise.id}`}
-        >
-          <Share2 className="w-5 h-5 text-foreground" />
-        </button>
+          {/* Share Button */}
+          <button
+            onClick={handleShare}
+            className="flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm bg-foreground/10 transition-all hover-elevate active-elevate-2"
+            aria-label="Dela övning"
+            data-testid={`button-share-${exercise.id}`}
+          >
+            <Share2 className="w-5 h-5 text-foreground" />
+          </button>
+        </div>
+
+        {/* Right side: Completion Badge or Watermark */}
+        {completed ? (
+          <div className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-full shadow-md" data-testid={`badge-completed-${exercise.id}`}>
+            <CheckCircle2 className="w-4 h-4" />
+            <span className="text-xs font-medium">Slutförd</span>
+          </div>
+        ) : (
+          <div className="text-xs text-muted-foreground" data-testid="text-watermark">
+            mindfulnessguiden.se
+          </div>
+        )}
       </div>
 
       {/* Content Container */}
