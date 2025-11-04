@@ -1,0 +1,594 @@
+Product Requirements Document (PRD)
+Mindfulnessguiden Verktygslådan - Progressive Web App
+Version: 1.0 Date: 2025-11-03  Deployment: Vercel or Netlify Target Platforms: iOS Safari, Chrome, DuckDuckGo (mobile & desktop)
+
+1. PRODUCT OVERVIEW
+1.1 Purpose
+A lightweight Progressive Web App (PWA) providing mindfulness guides with a portable toolkit of exercises accessible on their phones. Functions as a lead magnet and practical resource for certified mindfulness facilitators.
+1.2 Core Value Proposition
+Simple, swipeable flashcard interface for quick access to mindfulness exercises
+Works 100% offline once installed
+No backend, no authentication, no data collection
+Small footprint, fast loading
+1.3 User Persona
+Primary: Certified mindfulness guides from Mindfulnessguiden courses
+Secondary: HR professionals, organizational developers interested in workplace mindfulness
+Language: Swedish-speaking users in Sweden
+Device: Primarily mobile (iPhone/Android), but must work on desktop
+
+2. TECHNICAL STACK
+2.1 Core Technologies
+Framework: React 18+
+Build Tool: Vite 5+
+Language: JavaScript (or TypeScript if preferred)
+Styling: CSS Modules or Styled Components
+PWA: Workbox (via Vite PWA plugin)
+2.2 Key Dependencies
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.17.0",
+    "@vitejs/plugin-react": "^4.2.0"
+  }
+}
+2.3 Design System
+Typography:
+Primary: 'Roboto', 'Inter', sans-serif)
+
+Colors (from mindfulnessguiden.se):
+Primary Navy: #293556
+Lavender: #E6E6FA
+Cream/Off-white: #F6F4EA
+Additional colors as needed from website inspection
+Design Philosophy: iOS Human Interface Guidelines (HIG) principles
+Minimal shadows (subtle elevation)
+Ample whitespace
+Rounded corners
+44x44px minimum touch targets
+Smooth, physics-based animations
+
+3. FEATURES & FUNCTIONALITY
+3.1 Core Features
+3.1.1 Cover Card (Card 0)
+Content:
+Text link: "mindfulnessguiden.se" (clickable, opens in new tab)
+Logo (centered, provided as TheLogo.png)
+Intro text: "Välkommen till Verktygslådan för mindfulnessguider"
+Accordion component:
+Closed state (default): Shows text “Safari browser: Såhär laddar du ned verktygslådan som app i telefonen >"
+Open state: Displays installation instructions (see section 3.1.2)
+Layout:
+Vertically centered content
+Only nav arrow to the right on this card (to swipe to next card in deck)
+Logo should be prominent
+Clean, welcoming design
+3.1.2 Installation Instructions (Inside Accordion)
+Content Structure (recreate as HTML, not image):
+For iOS - Safari:
+Öppna "Dela-menyn" genom att trycka på delningsikonen
+Visual representation: Share icon
+Välj "Lägg till på hemskärmen" från listan
+Visual representation: "Add to Home Screen" button
+Välj "Lägg till" på nästa skärm
+Confirmation step
+For Android - Chrome:
+Tryck på menyknappen (tre punkter)
+Välj "Lägg till på startskärmen"
+Bekräfta genom att trycka "Lägg till"
+Implementation Notes:
+Use simple HTML/CSS for maximum accessibility
+Include small icon representations (can use emoji or simple SVG icons)
+Should be responsive and readable on all screen sizes
+Consider detecting platform and showing relevant instructions first
+3.1.3 Exercise Cards (Cards 1-10)
+Content Structure:
+Watermark: "mindfulnessguiden.se" (top right corner, subtle, small font)
+Exercise Name: Large, bold heading
+Duration: "Tid: X minuter" (for now, hardcoded random value between 4-15 minutes per card)
+Instructions: Body text, scrollable if content exceeds card height
+Logo: Small, centered horizontally at bottom of card (provided as TheLogo.png)
+Navigation: Left/Right arrows visible on edges, center-aligned vertically
+Interaction:
+Swipe left/right to navigate (mobile)
+Click arrows to navigate (desktop/mobile)
+Smooth animated transitions between cards
+Scroll within card if content is long (vertical scroll only within card)
+3.2 Navigation System
+3.2.1 Card Swiping
+Touch gestures: Swipe left (next card) / Swipe right (previous card)
+Mouse drag: Optional - allow click-and-drag on desktop
+Keyboard: Arrow keys for desktop navigation
+Animation: Smooth slide transition (300ms ease-out)
+3.2.2 Navigation Arrows
+Position: Fixed on left and right edges of viewport, vertically centered
+Visibility: Always visible
+Design:
+Subtle, iOS-style chevron icons
+Semi-transparent background circle/pill
+Tap/click area: minimum 44x44px
+Should not overlap content
+Behavior:
+Left arrow disabled on first card (cover card)
+Right arrow disabled on last card (card 10)
+Visual feedback on hover/press
+3.2.3 Progress Indicator
+Type: Simple dot indicator or "Card X of 11" text
+Position: Bottom center or top center of card
+Design: Minimal, not distracting
+Behavior: Updates as user navigates
+3.3 Data Structure
+3.3.1 Exercise JSON Schema
+File: /src/data/exercises.json
+{
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Bodyscan meditation",
+      "duration": "8 minuter",
+      "instructions": "Ligg på rygg med benen utsträckta och armarna längs sidorna, handflatorna vända uppåt. Fokusera din uppmärksamhet långsamt och medvetet på varje del av din kropp, i ordning, från tå till huvud eller huvud till tå. Var medveten om eventuella känslor, känslor eller tankar som är förknippade med varje del av din kropp."
+    },
+    {
+      "id": 2,
+      "name": "Bodyscan meditation",
+      "duration": "12 minuter",
+      "instructions": "Ligg på rygg med benen utsträckta och armarna längs sidorna, handflatorna vända uppåt. Fokusera din uppmärksamhet långsamt och medvetet på varje del av din kropp, i ordning, från tå till huvud eller huvud till tå. Var medveten om eventuella känslor, känslor eller tankar som är förknippade med varje del av din kropp."
+    }
+    // ... 8 more exercises (total 10)
+  ]
+}
+Notes:
+For initial development, use the Body Scan exercise (translated to Swedish) for all 10 cards
+Duration should vary between 4-15 minutes (hardcoded for now)
+Instructions should be actual Swedish text, not placeholder lorem ipsum
+Future: This structure allows easy content updates without code changes
+
+4. PROGRESSIVE WEB APP (PWA) REQUIREMENTS
+4.1 Manifest File
+File: /public/manifest.json
+{
+  "name": "Mindfulnessguiden Verktygslådan",
+  "short_name": "Verktygslådan",
+  "description": "Verktygslåda för certifierade mindfulnessguider",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F4EA",
+  "theme_color": "#293556",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+Icon Requirements:
+Use provided TheLogo.png as base
+Generate 192x192 and 512x512 PNG icons
+Icons should have proper padding for iOS "maskable" requirement
+Background should match brand colors
+4.2 Service Worker
+Requirements:
+Cache all static assets (HTML, CSS, JS, images, JSON)
+Implement "cache-first" strategy for maximum offline reliability
+Update cache on new deployments
+No network requests required after first load
+Implementation:
+// Use Vite PWA plugin with Workbox
+// vite.config.js configuration:
+{
+  plugins: [
+    VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
+      },
+      manifest: {
+        // manifest.json content from above
+      }
+    })
+  ]
+}
+4.3 Offline Functionality
+100% offline operation after initial load
+No error states for missing network
+All assets bundled and cached
+No external API calls
+No analytics or tracking (fully privacy-respecting)
+
+5. UI/UX SPECIFICATIONS
+5.1 Layout & Spacing
+iOS HIG Principles:
+Minimum touch target: 44x44px
+Spacing unit: 8px base (8, 16, 24, 32px)
+Card padding: 24px
+Safe area insets respected (especially iOS notch/home indicator)
+5.2 Typography Scale
+/* Based on iOS type scale */
+--font-size-small: 13px;      /* Captions, watermarks */
+--font-size-body: 17px;        /* Body text, instructions */
+--font-size-large: 22px;       /* Exercise duration */
+--font-size-title: 28px;       /* Exercise names */
+--font-size-display: 34px;     /* Cover card title */
+
+--line-height-tight: 1.2;
+--line-height-normal: 1.5;
+--line-height-relaxed: 1.7;
+5.3 Card Specifications
+Dimensions:
+Mobile: Full viewport width, appropriate height (min 70vh, max 100vh)
+Desktop: Max width 600px, centered, appropriate height
+Padding: 24px on all sides
+Border radius: 16px (iOS-style rounded corners)
+Shadow: Subtle elevation box-shadow: 0 4px 12px rgba(41, 53, 86, 0.08);
+
+Scrolling Behavior:
+Card container: Fixed height, no scroll
+Content area: Scrollable vertically if content exceeds available space
+Scroll indicators: Native browser scrollbar (minimal, auto-hiding on iOS)
+5.4 Color Usage
+:root {
+  /* Brand colors */
+  --color-primary: #293556;      /* Navy - headers, text */
+  --color-secondary: #E6E6FA;    /* Lavender - accents */
+  --color-background: #F6F4EA;   /* Cream - card background */
+  
+  /* Semantic colors */
+  --color-text-primary: #293556;
+  --color-text-secondary: rgba(41, 53, 86, 0.6);
+  --color-border: rgba(41, 53, 86, 0.1);
+  --color-overlay: rgba(41, 53, 86, 0.04);
+}
+5.5 Animation Standards
+Timing:
+Card transitions: 300ms ease-out
+Button press: 150ms ease-in-out
+Accordion open/close: 250ms ease-in-out
+Transforms:
+Use transform and opacity for animations (GPU-accelerated)
+Avoid animating width, height, or left/right
+
+6. COMPONENT STRUCTURE
+6.1 Suggested Component Hierarchy
+src/
+├── components/
+│   ├── CoverCard.jsx           # Landing card with intro and accordion
+│   ├── ExerciseCard.jsx        # Individual exercise card
+│   ├── CardContainer.jsx       # Wrapper handling swipe/navigation
+│   ├── NavigationArrows.jsx    # Left/Right arrow buttons
+│   ├── ProgressIndicator.jsx   # Dot indicator or counter
+│   ├── Accordion.jsx           # Reusable accordion for install instructions
+│   └── InstallInstructions.jsx # Content for installation steps
+├── data/
+│   └── exercises.json          # Exercise content
+├── assets/
+│   ├── TheLogo.png             # Provided logo
+│   └── icons/                  # Arrow icons, etc.
+├── styles/
+│   ├── global.css              # CSS variables, resets
+│   └── [component].module.css  # Component-specific styles
+├── App.jsx                     # Main app component
+└── main.jsx                    # Entry point
+6.2 State Management
+No external state library needed - use React's built-in hooks:
+useState for current card index
+useEffect for loading exercise data
+useRef for touch gesture tracking
+Context API only if needed for theme/settings (unlikely in v1)
+6.3 Key Component Responsibilities
+App.jsx
+Load exercise data from JSON
+Manage current card index
+Handle keyboard navigation
+Render CardContainer with exercises
+CardContainer.jsx
+Handle swipe gestures (touch events)
+Animate card transitions
+Manage card visibility
+Render current card (Cover or Exercise)
+ExerciseCard.jsx
+Display exercise name, duration, instructions
+Render logo at bottom
+Handle scrollable content
+Show watermark
+CoverCard.jsx
+Display welcome content
+Render clickable mindfulnessguiden.se link
+Include Accordion with install instructions
+Logo display
+
+7. BROWSER COMPATIBILITY
+7.1 Primary Support
+iOS Safari 15+ (primary target)
+Chrome 90+ (mobile & desktop)
+Edge 90+
+Firefox 88+
+DuckDuckGo Browser
+7.2 PWA Installation Support
+iOS: Safari only (users must open in Safari to install)
+Android: Chrome, Edge, Firefox, DuckDuckGo all support PWA installation
+Desktop: Chrome, Edge support PWA installation
+7.3 Fallback Considerations
+Graceful degradation for older browsers
+No PWA install prompt on unsupported browsers (still works as web app)
+Touch gestures fallback to arrow buttons for non-touch devices
+
+8. PERFORMANCE REQUIREMENTS
+8.1 Load Time Targets
+First Contentful Paint (FCP): < 1.0s
+Time to Interactive (TTI): < 2.0s
+Total bundle size: < 150KB (gzipped)
+8.2 Optimization Strategies
+Code splitting (if needed, though unlikely with small app)
+Image optimization (compress logo and icons)
+Minification (handled by Vite)
+Tree shaking (handled by Vite)
+No heavy dependencies (no Material-UI, no animation libraries unless necessary)
+8.3 Lighthouse Goals
+Performance: 95+
+Accessibility: 100
+Best Practices: 95+
+SEO: 90+
+PWA: Pass all audits
+
+9. ACCESSIBILITY (A11Y)
+9.1 Requirements
+WCAG 2.1 Level AA compliance
+Keyboard navigation (arrow keys, tab, enter)
+Screen reader support (proper ARIA labels)
+Sufficient color contrast (4.5:1 for body text, 3:1 for large text)
+Focus indicators visible on all interactive elements
+No content should rely solely on color to convey meaning
+9.2 Specific Implementations
+<nav> element for card navigation
+role="region" for each card
+aria-label on navigation arrows
+aria-expanded on accordion
+aria-current on current card indicator
+Alt text on logo images
+Proper heading hierarchy (h1, h2, h3)
+
+10. SECURITY & PRIVACY
+10.1 Data Handling
+No user data collection
+No cookies
+No analytics tracking
+No external API calls (after initial load)
+No authentication
+10.2 Content Security Policy (CSP)
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               style-src 'self' 'unsafe-inline'; 
+               font-src 'self'; 
+               img-src 'self' data:; 
+               script-src 'self';">
+
+11. DEPLOYMENT
+11.1 Build Process
+# Install dependencies
+npm install
+
+# Development
+npm run dev
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+11.2 Deployment Platforms (Choose One)
+Option A: Vercel
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+Option B: Netlify
+# Install Netlify CLI
+npm i -g netlify-cli
+
+# Deploy
+netlify deploy --prod --dir=dist
+11.3 Environment Configuration
+Build settings:
+Build command: npm run build
+Output directory: dist
+Node version: 18.x or 20.x
+11.4 Custom Domain (Future)
+Consider: verktyg.mindfulnessguiden.se or similar subdomain
+
+12. FUTURE ENHANCEMENTS (Out of Scope for v1)
+12.1 Content Management
+Admin interface for updating exercises without redeployment
+CMS integration (Contentful, Sanity, or simple GitHub-based)
+12.2 User Features
+Favorites/bookmarking exercises
+Custom timer for exercises
+Audio guidance integration
+Dark mode toggle
+12.3 Analytics (Privacy-Respecting)
+Plausible or Fathom analytics
+Usage patterns (which exercises most viewed)
+Install conversion rate
+12.4 Advanced Features
+Share specific exercise via URL
+Export exercises as PDF
+Multi-language support (English, Norwegian)
+Integration with mindfulnessguiden.se user accounts
+
+13. TESTING REQUIREMENTS
+13.1 Manual Testing Checklist
+Devices:
+[ ] iPhone (Safari)
+[ ] Android phone (Chrome)
+[ ] iPad (Safari)
+[ ] Desktop (Chrome, Safari, Firefox)
+Functionality:
+[ ] PWA installs successfully on iOS
+[ ] PWA installs successfully on Android
+[ ] All cards render correctly
+[ ] Swipe gestures work smoothly
+[ ] Arrow buttons function
+[ ] Accordion opens/closes
+[ ] Links open correctly
+[ ] Content scrolls within cards
+[ ] Works offline after installation
+[ ] Logo and images load correctly
+13.2 Automated Testing (Optional for v1)
+Unit tests for components (Jest + React Testing Library)
+E2E tests (Playwright or Cypress)
+Visual regression tests (Chromatic)
+
+14. DOCUMENTATION REQUIREMENTS
+14.1 Code Documentation
+README.md with setup instructions
+Comments for complex logic
+Component prop documentation (JSDoc or TypeScript)
+14.2 User Documentation
+Installation instructions within app
+Optional: Simple user guide on mindfulnessguiden.se
+
+15. SUCCESS METRICS (Post-Launch)
+15.1 Technical Metrics
+App installs: Track via server logs (initial page loads)
+Offline usage: Service worker activation rate
+Performance: Lighthouse scores maintained
+15.2 User Metrics (if analytics added later)
+Install rate (visitors → installations)
+Retention: Return usage after 7 days
+Most viewed exercises
+Average session duration
+
+16. PROJECT TIMELINE (ESTIMATE)
+Phase 1: Setup & Core Structure (1-2 days)
+Initialize Vite + React project
+Set up PWA plugin and manifest
+Create component structure
+Implement basic styling system
+Phase 2: Feature Implementation (2-3 days)
+Build CoverCard with accordion
+Build ExerciseCard component
+Implement card navigation and swiping
+Add JSON data loading
+Create navigation arrows and progress indicator
+Phase 3: Polish & Testing (1-2 days)
+Refine animations and transitions
+Accessibility improvements
+Cross-browser testing
+Performance optimization
+PWA testing on real devices
+Phase 4: Deployment (0.5 day)
+Production build
+Deploy to Vercel/Netlify
+Testing on production URL
+Generate app icons
+Total Estimate: 5-8 days of development
+
+17. OPEN QUESTIONS / DECISIONS NEEDED
+17.1 Before Development Starts
+[x] Confirm colors from website - mindfulnessguiden.se
+[x] Font stack decision Roboto and fallback:  inter, sanserif
+[x] JSON, yes use json - do not hardcode the exercise cards.
+[x] Navigation pattern (arrows visible) - yes visible on each card.
+[ ] Final decision on Vercel vs Netlify. Decide later
+[ ] Confirmation on Swedish translations for all UI text
+17.2 During Development
+Progress indicator style (dots vs counter) to start with use counter: 1/10, 2/10, 3/10 etc
+Exact logo sizing on exercise cards
+Accordion animation style, use a smooth animation 
+Error handling for JSON loading (though unlikely)
+
+18. CONSTRAINTS & ASSUMPTIONS
+18.1 Constraints
+Must work on iOS Safari (primary platform)
+Must be 100% offline-capable
+No backend or database
+Small bundle size (<150KB)
+No external dependencies for core functionality
+18.2 Assumptions
+Users have modern smartphones (iOS 15+, Android 10+)
+Users understand how to install PWAs (instructions provided)
+Exercise content will be in Swedish
+Initial release will have exactly 10 exercises + 1 cover card
+Logo provided is suitable for both header and footer usage
+
+19. RISK MITIGATION
+19.1 Technical Risks
+Risk: PWA installation issues on iOS
+Mitigation: Clear instructions, test on multiple iOS versions
+Risk: Swipe gestures conflict with browser navigation
+Mitigation: Implement proper touch event handling, preventDefault where needed
+Risk: Content too long for mobile screens
+Mitigation: Scrollable content areas, test with various content lengths
+19.2 User Experience Risks
+Risk: Users don't understand how to install PWA
+Mitigation: Prominent, clear instructions on cover card
+Risk: Arrow buttons not discoverable
+Mitigation: Always visible, clear visual design
+
+20. APPENDIX
+20.1 Swedish UI Text
+Cover Card:
+Title: "Välkommen till Verktygslådan för mindfulnessguider"
+Link: "mindfulnessguiden.se"
+Accordion: "Såhär laddar du ned verktygslådan som app i telefonen >"
+Exercise Cards:
+Duration label: "Tid:"
+Watermark: "mindfulnessguiden.se"
+Installation Instructions:
+iOS section heading: "För iOS - Safari"
+Android section heading: "För Android - Chrome"
+(See section 3.1.2 for full text)
+20.2 Example Exercise (Body Scan)
+Swedish Translation:
+Namn: Bodyscan meditation
+
+Instruktioner: Ligg på rygg med benen utsträckta och armarna längs sidorna, handflatorna vända uppåt. Fokusera din uppmärksamhet långsamt och medvetet på varje del av din kropp, i ordning, från tå till huvud eller huvud till tå. Var medveten om eventuella känslor, känslor eller tankar som är förknippade med varje del av din kropp.
+
+Tid: 8 minuter
+20.3 Assets Provided
+TheLogo.png - Main logo
+howtoinstall.jpeg - Reference for installation instructions (content to be recreated as HTML)
+20.4 Reference Links
+Website: https://www.mindfulnessguiden.se
+Repository: https://github.com/L-Lisa/mindfulnessguiden-tools.git
+iOS HIG: https://developer.apple.com/design/human-interface-guidelines/
+PWA Documentation: https://web.dev/progressive-web-apps/
+
+DOCUMENT REVISION HISTORY
+
+
+END OF DOCUMENT
+Next Steps:
+Review and approve this PRD
+Set up GitHub repository structure
+Initialize Vite + React project
+Begin Phase 1 development
+Questions or Clarifications: Contact project owner for any technical or design decisions not covered in this document.
