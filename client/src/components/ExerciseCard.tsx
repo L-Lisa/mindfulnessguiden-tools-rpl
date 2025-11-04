@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { Exercise } from "@shared/schema";
 import { Heart, CheckCircle2, Circle } from "lucide-react";
 import { toggleFavorite, isFavorite, toggleCompleted, isCompleted } from "@/lib/localStorage";
+import { Timer } from "./Timer";
 import logoUrl from "@assets/logo_transparent_1762257242802.webp";
 
 interface ExerciseCardProps {
@@ -98,10 +99,10 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
           {exercise.name}
         </h2>
 
-        {/* Duration */}
-        <p className="text-xl font-medium text-muted-foreground" data-testid={`text-duration-${exercise.id}`}>
-          Tid: {exercise.duration}
-        </p>
+        {/* Timer */}
+        {exercise.duration && (
+          <Timer durationStr={exercise.duration} exerciseId={exercise.id} />
+        )}
 
         {/* Instructions */}
         <div className="w-full max-w-2xl">
