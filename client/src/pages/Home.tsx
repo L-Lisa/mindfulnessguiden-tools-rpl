@@ -7,20 +7,14 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load exercises from JSON file (will be created in integration phase)
-    // For now, we'll use placeholder data
     const loadExercises = async () => {
       try {
-        // This will be replaced with actual fetch in integration phase
-        const mockExercises: Exercise[] = [
-          {
-            id: 1,
-            name: "Bodyscan meditation",
-            duration: "8 minuter",
-            instructions: "Ligg på rygg med benen utsträckta och armarna längs sidorna, handflatorna vända uppåt. Fokusera din uppmärksamhet långsamt och medvetet på varje del av din kropp, i ordning, från tå till huvud eller huvud till tå. Var medveten om eventuella känslor, känslor eller tankar som är förknippade med varje del av din kropp."
-          }
-        ];
-        setExercises(mockExercises);
+        const response = await fetch('/exercises.json');
+        if (!response.ok) {
+          throw new Error('Failed to load exercises');
+        }
+        const data = await response.json();
+        setExercises(data.exercises);
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load exercises:", error);

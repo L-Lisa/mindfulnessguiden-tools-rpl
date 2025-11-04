@@ -13,7 +13,8 @@ export function CardContainer({ exercises }: CardContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const totalCards = exercises.length + 1; // +1 for cover card
@@ -24,21 +25,25 @@ export function CardContainer({ exercises }: CardContainerProps) {
   const minSwipeDistance = 50;
 
   const handlePrevious = () => {
-    if (canGoPrevious) {
-      setSlideDirection('right');
+    if (canGoPrevious && !isTransitioning) {
+      setIsTransitioning(true);
+      setTransitionDirection('right');
       setTimeout(() => {
         setCurrentIndex(currentIndex - 1);
-        setSlideDirection(null);
+        setIsTransitioning(false);
+        setTransitionDirection(null);
       }, 300);
     }
   };
 
   const handleNext = () => {
-    if (canGoNext) {
-      setSlideDirection('left');
+    if (canGoNext && !isTransitioning) {
+      setIsTransitioning(true);
+      setTransitionDirection('left');
       setTimeout(() => {
         setCurrentIndex(currentIndex + 1);
-        setSlideDirection(null);
+        setIsTransitioning(false);
+        setTransitionDirection(null);
       }, 300);
     }
   };
@@ -94,15 +99,15 @@ export function CardContainer({ exercises }: CardContainerProps) {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-background">
+    <div className="relative w-full h-screen overflow-hidden bg-background" style={{ paddingBottom: 'env(safe-area-inset-bottom)', paddingTop: 'env(safe-area-inset-top)' }}>
       <div
         ref={containerRef}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         className={`w-full h-full transition-all duration-300 ease-out ${
-          slideDirection === 'left' ? '-translate-x-full opacity-0' :
-          slideDirection === 'right' ? 'translate-x-full opacity-0' :
+          transitionDirection === 'left' ? '-translate-x-full opacity-0' :
+          transitionDirection === 'right' ? 'translate-x-full opacity-0' :
           'translate-x-0 opacity-100'
         }`}
       >
