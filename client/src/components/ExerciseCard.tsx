@@ -1,17 +1,58 @@
+import { useState, useEffect } from "react";
 import type { Exercise } from "@shared/schema";
+import { Heart } from "lucide-react";
+import { toggleFavorite, isFavorite } from "@/lib/localStorage";
 import logoUrl from "@assets/logo_transparent_1762257242802.webp";
 
 interface ExerciseCardProps {
   exercise: Exercise;
+  onFavoriteToggle: () => void;
 }
 
-export function ExerciseCard({ exercise }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, onFavoriteToggle }: ExerciseCardProps) {
+  const [favorited, setFavorited] = useState(false);
+
+  useEffect(() => {
+    if (exercise?.id) {
+      setFavorited(isFavorite(exercise.id));
+    }
+  }, [exercise?.id]);
+
+  const handleFavoriteClick = () => {
+    if (exercise?.id) {
+      const newState = toggleFavorite(exercise.id);
+      setFavorited(newState);
+      onFavoriteToggle();
+    }
+  };
+
+  // Guard against undefined exercise
+  if (!exercise) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col h-full min-h-[70vh] p-6 relative">
       {/* Watermark */}
       <div className="absolute top-4 right-4 text-xs text-muted-foreground" data-testid="text-watermark">
         mindfulnessguiden.se
       </div>
+
+      {/* Favorite Button */}
+      <button
+        onClick={handleFavoriteClick}
+        className={`absolute top-4 left-4 flex items-center justify-center w-11 h-11 rounded-full backdrop-blur-sm transition-all hover-elevate active-elevate-2 ${
+          favorited ? 'bg-red-500/20' : 'bg-foreground/10'
+        }`}
+        aria-label={favorited ? "Ta bort från favoriter" : "Lägg till i favoriter"}
+        data-testid={`button-favorite-${exercise.id}`}
+      >
+        <Heart 
+          className={`w-6 h-6 transition-all ${
+            favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
+          }`}
+        />
+      </button>
 
       {/* Content Container - Scrollable */}
       <div className="flex-1 flex flex-col items-center justify-start pt-8 space-y-6 overflow-y-auto">

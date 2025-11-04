@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import type { Exercise } from "@shared/schema";
 import { CardContainer } from "@/components/CardContainer";
+import { getFavorites } from "@/lib/localStorage";
 
 export default function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   useEffect(() => {
     const loadExercises = async () => {
@@ -15,6 +18,7 @@ export default function Home() {
         }
         const data = await response.json();
         setExercises(data.exercises);
+        setFavorites(getFavorites());
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load exercises:", error);
@@ -24,6 +28,25 @@ export default function Home() {
 
     loadExercises();
   }, []);
+
+  const handleFavoriteToggle = () => {
+    setFavorites(getFavorites());
+  };
+
+  const handleFilterToggle = () => {
+    setShowFavoritesOnly(!showFavoritesOnly);
+  };
+
+  const filteredExercises = showFavoritesOnly
+    ? exercises.filter(ex => favorites.includes(ex.id))
+    : exercises;
+
+  // Auto-disable favorites-only mode if no favorites exist
+  useEffect(() => {
+    if (showFavoritesOnly && favorites.length === 0) {
+      setShowFavoritesOnly(false);
+    }
+  }, [favorites.length, showFavoritesOnly]);
 
   if (isLoading) {
     return (
@@ -36,5 +59,13 @@ export default function Home() {
     );
   }
 
-  return <CardContainer exercises={exercises} />;
+  return (
+    <CardContainer 
+      exercises={filteredExercises} 
+      onFavoriteToggle={handleFavoriteToggle}
+      showFavoritesOnly={showFavoritesOnly}
+      onFilterToggle={handleFilterToggle}
+      favoritesCount={favorites.length}
+    />
+  );
 }
