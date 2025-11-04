@@ -19,7 +19,7 @@ export function NavigationArrows({
       {canGoPrevious && (
         <button
           onClick={onPrevious}
-          className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-11 h-11 rounded-full bg-foreground/10 backdrop-blur-sm transition-all duration-150 hover-elevate active-elevate-2 cursor-pointer"
+          className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-[60] flex items-center justify-center w-11 h-11 rounded-full bg-foreground/10 backdrop-blur-sm transition-all duration-150 hover-elevate active-elevate-2 cursor-pointer"
           aria-label="Föregående kort"
           data-testid="button-previous"
         >
@@ -31,7 +31,7 @@ export function NavigationArrows({
       {canGoNext && (
         <button
           onClick={onNext}
-          className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-11 h-11 rounded-full bg-foreground/10 backdrop-blur-sm transition-all duration-150 hover-elevate active-elevate-2 cursor-pointer"
+          className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-[60] flex items-center justify-center w-11 h-11 rounded-full bg-foreground/10 backdrop-blur-sm transition-all duration-150 hover-elevate active-elevate-2 cursor-pointer"
           aria-label="Nästa kort"
           data-testid="button-next"
         >
