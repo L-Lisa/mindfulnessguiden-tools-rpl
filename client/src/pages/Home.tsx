@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import type { Exercise } from "@shared/schema";
 import { CardContainer } from "@/components/CardContainer";
-import { getFavorites } from "@/lib/localStorage";
+import { getFavorites, getCompleted } from "@/lib/localStorage";
 
 export default function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [completed, setCompleted] = useState<number[]>([]);
 
   useEffect(() => {
     const loadExercises = async () => {
@@ -19,6 +20,7 @@ export default function Home() {
         const data = await response.json();
         setExercises(data.exercises);
         setFavorites(getFavorites());
+        setCompleted(getCompleted());
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load exercises:", error);
@@ -31,6 +33,10 @@ export default function Home() {
 
   const handleFavoriteToggle = () => {
     setFavorites(getFavorites());
+  };
+
+  const handleCompletionToggle = () => {
+    setCompleted(getCompleted());
   };
 
   const handleFilterToggle = () => {
@@ -66,6 +72,9 @@ export default function Home() {
       showFavoritesOnly={showFavoritesOnly}
       onFilterToggle={handleFilterToggle}
       favoritesCount={favorites.length}
+      onCompletionToggle={handleCompletionToggle}
+      completedCount={completed.length}
+      totalExercises={exercises.length}
     />
   );
 }

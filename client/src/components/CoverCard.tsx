@@ -1,15 +1,19 @@
 import { Accordion } from "./Accordion";
 import { InstallInstructions } from "./InstallInstructions";
-import { Filter, FilterX } from "lucide-react";
+import { Filter, FilterX, CheckCircle2 } from "lucide-react";
 import logoUrl from "@assets/logo_transparent_1762257242802.webp";
+import { getCompletionPercentage } from "@/lib/localStorage";
 
 interface CoverCardProps {
   showFavoritesOnly: boolean;
   onFilterToggle: () => void;
   favoritesCount: number;
+  completedCount: number;
+  totalExercises: number;
 }
 
-export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount }: CoverCardProps) {
+export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, completedCount, totalExercises }: CoverCardProps) {
+  const completionPercentage = getCompletionPercentage(totalExercises);
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 space-y-8">
       {/* Website Link */}
@@ -36,6 +40,19 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount }:
       <h1 className="text-3xl md:text-4xl font-bold text-center text-foreground leading-tight max-w-md">
         Välkommen till Verktygslådan för mindfulnessguider
       </h1>
+
+      {/* Completion Progress */}
+      {completedCount > 0 && (
+        <div className="flex items-center gap-3 px-5 py-3 bg-green-500/10 rounded-full border border-green-500/20" data-testid="text-completion-progress">
+          <CheckCircle2 className="w-6 h-6 text-green-600" />
+          <div className="text-center">
+            <p className="text-sm font-medium text-foreground">
+              {completedCount} av {totalExercises} övningar slutförda
+            </p>
+            <p className="text-xs text-muted-foreground">{completionPercentage}% klart</p>
+          </div>
+        </div>
+      )}
 
       {/* Favorites Filter Button */}
       {favoritesCount > 0 && (

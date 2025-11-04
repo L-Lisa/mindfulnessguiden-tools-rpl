@@ -11,9 +11,12 @@ interface CardContainerProps {
   showFavoritesOnly: boolean;
   onFilterToggle: () => void;
   favoritesCount: number;
+  onCompletionToggle: () => void;
+  completedCount: number;
+  totalExercises: number;
 }
 
-export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, onFilterToggle, favoritesCount }: CardContainerProps) {
+export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, onFilterToggle, favoritesCount, onCompletionToggle, completedCount, totalExercises }: CardContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -107,6 +110,8 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
           showFavoritesOnly={showFavoritesOnly}
           onFilterToggle={onFilterToggle}
           favoritesCount={favoritesCount}
+          completedCount={completedCount}
+          totalExercises={totalExercises}
         />
       );
     } else {
@@ -118,10 +123,12 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
             showFavoritesOnly={showFavoritesOnly}
             onFilterToggle={onFilterToggle}
             favoritesCount={favoritesCount}
+            completedCount={completedCount}
+            totalExercises={totalExercises}
           />
         );
       }
-      return <ExerciseCard exercise={exercise} onFavoriteToggle={onFavoriteToggle} />;
+      return <ExerciseCard exercise={exercise} onFavoriteToggle={onFavoriteToggle} onCompletionToggle={onCompletionToggle} />;
     }
   };
 
