@@ -83,6 +83,22 @@ shared/
 ## Running the Project
 The workflow "Start application" runs `npm run dev` which starts the Vite development server on port 5000.
 
+## Recent Critical Fixes (November 2025)
+
+### Safari <11.1 Compatibility Fix
+**Problem:** White screen on older Safari (iOS <11.3) caused by `env(safe-area-inset-*)` CSS function crashing the CSS parser.
+**Solution:** Removed all `env()` usage from CardContainer.tsx and ProgressIndicator.tsx, replaced with standard Tailwind padding classes.
+**Service Worker:** Bumped cache version from v2 to v3 to ensure users get fresh code.
+
+### High-Contrast Theme Enhancement
+**Problem:** Previous high-contrast theme had minimal visual difference (only 16% lightness change).
+**Solution:** Implemented pure black foreground (0 0% 0%) achieving ~20:1 contrast ratio (WCAG AAA compliant).
+**Activation:** Set via `data-theme="high-contrast"` attribute, managed in settings.ts.
+
+### iOS Touch Target Compliance
+**Problem:** Timer buttons were 40×40px, below iOS HIG minimum of 44×44px.
+**Solution:** Updated Timer.tsx play/pause and reset buttons from w-10 h-10 to w-11 h-11 (44×44px).
+
 ## User Personas
 - **Primary**: Certified mindfulness guides from Mindfulnessguiden courses
 - **Secondary**: HR professionals, organizational developers interested in workplace mindfulness
