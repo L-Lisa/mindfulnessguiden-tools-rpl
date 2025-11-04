@@ -83,8 +83,8 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
         </div>
       )}
 
-      {/* Action Buttons - Sticky on left */}
-      <div className="sticky top-0 left-0 flex flex-col gap-2 mb-4">
+      {/* Action Buttons - Sticky on top, horizontal */}
+      <div className="sticky top-0 left-0 flex flex-row gap-2 mb-4">
         {/* Favorite Button */}
         <button
           onClick={handleFavoriteClick}
@@ -95,7 +95,7 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
           data-testid={`button-favorite-${exercise.id}`}
         >
           <Heart 
-            className={`w-6 h-6 transition-all ${
+            className={`w-5 h-5 transition-all ${
               favorited ? 'fill-red-500 text-red-500' : 'text-foreground'
             }`}
           />
@@ -111,9 +111,9 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
           data-testid={`button-complete-${exercise.id}`}
         >
           {completed ? (
-            <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-600" />
+            <CheckCircle2 className="w-5 h-5 text-green-600 fill-green-600" />
           ) : (
-            <Circle className="w-6 h-6 text-foreground" />
+            <Circle className="w-5 h-5 text-foreground" />
           )}
         </button>
 
@@ -124,7 +124,7 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
           aria-label="Dela övning"
           data-testid={`button-share-${exercise.id}`}
         >
-          <Share2 className="w-6 h-6 text-foreground" />
+          <Share2 className="w-5 h-5 text-foreground" />
         </button>
       </div>
 

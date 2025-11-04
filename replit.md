@@ -35,9 +35,12 @@ A Progressive Web App providing Swedish mindfulness practitioners with a portabl
 
 ## Navigation
 - **Swipe Gestures**: Left/Right swipe on mobile
-- **Navigation Arrows**: iOS-style chevrons on left/right edges
+- **Navigation Arrows**: iOS-style chevrons at 75% from top on left/right edges
 - **Keyboard**: Arrow keys for desktop navigation
-- **Progress Indicator**: Shows "Kort X av 11" at bottom
+- **Progress Indicator**: Shows "X/Y" format (e.g. "1/11") in bottom-right corner
+- **Action Buttons**: Horizontal row of three buttons (favorite, complete, share) in top-left
+  - Button size: 44×44px (iOS HIG compliant touch targets)
+  - Icon size: 20×20px for cleaner appearance
 
 ## PWA Configuration
 - **Service Worker**: Manual implementation in `client/public/sw.js`
