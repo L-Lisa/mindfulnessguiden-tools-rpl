@@ -20,6 +20,8 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -95,16 +97,42 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   }, [canGoNext, isTransitioning, currentIndex]);
 
   const onTouchStart = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (!touchStart || !isDragging || isTransitioning) return;
+    
+    const currentTouch = e.targetTouches[0].clientX;
+    const diff = currentTouch - touchStart;
+    
+    // Limit drag distance and apply resistance at edges
+    let limitedDiff = diff;
+    if ((diff > 0 && !canGoPrevious) || (diff < 0 && !canGoNext)) {
+      // Apply resistance when dragging at boundary
+      limitedDiff = diff * 0.2;
+    } else {
+      // Limit maximum drag distance
+      limitedDiff = Math.max(-300, Math.min(300, diff));
+    }
+    
+    setDragOffset(limitedDiff);
+    setTouchEnd(currentTouch);
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart) return;
+    
+    setIsDragging(false);
+    setDragOffset(0);
+    
+    if (!touchEnd) {
+      setTouchStart(null);
+      return;
+    }
     
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
@@ -172,12 +200,17 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
-          className={`w-full h-full transition-all duration-300 ease-out ${
+          className={`w-full h-full ${isDragging ? '' : 'transition-all duration-300 ease-out'} ${
             transitionDirection === 'left' ? '-translate-x-full opacity-0' :
             transitionDirection === 'right' ? 'translate-x-full opacity-0' :
             'translate-x-0 opacity-100'
           }`}
-          style={{ paddingBottom: 'env(safe-area-inset-bottom)', paddingTop: 'env(safe-area-inset-top)' }}
+          style={{ 
+            paddingBottom: 'env(safe-area-inset-bottom)', 
+            paddingTop: 'env(safe-area-inset-top)',
+            transform: isDragging ? `translateX(${dragOffset}px)` : undefined,
+            touchAction: 'pan-y pinch-zoom'
+          }}
         >
           <div className="max-w-2xl mx-auto h-full flex items-center justify-center px-4">
             <div className="w-full bg-card rounded-2xl shadow-lg overflow-visible" style={{ boxShadow: '0 4px 12px rgba(41, 53, 86, 0.08)' }}>
