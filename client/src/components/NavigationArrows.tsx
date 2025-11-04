@@ -13,9 +13,6 @@ export function NavigationArrows({
   canGoPrevious,
   canGoNext,
 }: NavigationArrowsProps) {
-  // DEBUG: Log when props change
-  console.log('🎯 NavigationArrows rendered:', { canGoPrevious, canGoNext });
-  
   return (
     <>
       {/* Left Arrow - only show if we can go previous */}

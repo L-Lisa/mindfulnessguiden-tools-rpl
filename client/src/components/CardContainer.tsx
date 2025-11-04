@@ -28,16 +28,6 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalCards - 1;
 
-  // DEBUG LOGGING
-  useEffect(() => {
-    console.log('🔍 CardContainer DEBUG:', {
-      currentIndex,
-      totalCards,
-      canGoPrevious,
-      canGoNext
-    });
-  }, [currentIndex, totalCards, canGoPrevious, canGoNext]);
-
   // Clamp currentIndex when exercises array changes (e.g., filtering favorites)
   useEffect(() => {
     if (currentIndex >= totalCards) {
