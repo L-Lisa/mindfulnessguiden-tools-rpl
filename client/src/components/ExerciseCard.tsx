@@ -67,7 +67,7 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
   }
 
   return (
-    <div className="flex flex-col h-full max-h-screen p-6 relative overflow-y-auto">
+    <div className="flex flex-col min-h-[70vh] p-6 relative">
       {/* Completion Badge */}
       {completed && (
         <div className="sticky top-0 right-0 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-full shadow-md ml-auto mb-2 w-fit" data-testid={`badge-completed-${exercise.id}`}>
