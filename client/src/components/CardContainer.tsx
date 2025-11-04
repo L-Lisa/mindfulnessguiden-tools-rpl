@@ -206,8 +206,6 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
             'translate-x-0 opacity-100'
           }`}
           style={{ 
-            paddingBottom: 'env(safe-area-inset-bottom)', 
-            paddingTop: 'env(safe-area-inset-top)',
             transform: isDragging ? `translateX(${dragOffset}px)` : undefined,
             touchAction: 'pan-y pinch-zoom'
           }}

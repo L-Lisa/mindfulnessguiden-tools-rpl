@@ -1,6 +1,6 @@
-const CACHE_NAME = 'mindfulness-v2';
-const STATIC_CACHE_NAME = 'mindfulness-static-v2';
-const DYNAMIC_CACHE_NAME = 'mindfulness-dynamic-v2';
+const CACHE_NAME = 'mindfulness-v3';
+const STATIC_CACHE_NAME = 'mindfulness-static-v3';
+const DYNAMIC_CACHE_NAME = 'mindfulness-dynamic-v3';
 
 // Static assets to cache on install
 const urlsToCache = [
