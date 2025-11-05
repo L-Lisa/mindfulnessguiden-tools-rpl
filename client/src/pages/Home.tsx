@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import type { Exercise } from "@shared/schema";
+import { useEffect, useState, useMemo } from "react";
+import type { Exercise, ExerciseCategory } from "@shared/schema";
 import { CardContainer } from "@/components/CardContainer";
 import { getFavorites, getCompleted } from "@/lib/localStorage";
 
@@ -7,6 +7,7 @@ export default function Home() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<ExerciseCategory | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [completed, setCompleted] = useState<number[]>([]);
 
@@ -43,11 +44,49 @@ export default function Home() {
 
   const handleFilterToggle = () => {
     setShowFavoritesOnly(!showFavoritesOnly);
+    // Reset to CoverCard when filter changes to avoid blank screens
+    window.location.hash = '';
   };
 
-  const filteredExercises = showFavoritesOnly
-    ? exercises.filter(ex => favorites.includes(ex.id))
-    : exercises;
+  const handleCategorySelect = (category: ExerciseCategory | null) => {
+    setSelectedCategory(category);
+    // Reset to CoverCard when filter changes to avoid blank screens
+    window.location.hash = '';
+  };
+
+  // Calculate category counts
+  const categoryCounts = useMemo(() => {
+    const counts: Record<ExerciseCategory, number> = {
+      "Andning": 0,
+      "Rörelse": 0,
+      "Meditation": 0
+    };
+    
+    exercises.forEach(ex => {
+      if (ex.category) {
+        counts[ex.category] = (counts[ex.category] || 0) + 1;
+      }
+    });
+    
+    return counts;
+  }, [exercises]);
+
+  // Filter exercises by favorites and category
+  const filteredExercises = useMemo(() => {
+    let filtered = exercises;
+    
+    // Filter by category first
+    if (selectedCategory) {
+      filtered = filtered.filter(ex => ex.category === selectedCategory);
+    }
+    
+    // Then filter by favorites
+    if (showFavoritesOnly) {
+      filtered = filtered.filter(ex => favorites.includes(ex.id));
+    }
+    
+    return filtered;
+  }, [exercises, selectedCategory, showFavoritesOnly, favorites]);
 
   // Auto-disable favorites-only mode if no favorites exist
   useEffect(() => {
@@ -77,6 +116,9 @@ export default function Home() {
       onCompletionToggle={handleCompletionToggle}
       completedCount={completed.length}
       totalExercises={exercises.length}
+      selectedCategory={selectedCategory}
+      onCategorySelect={handleCategorySelect}
+      categoryCounts={categoryCounts}
     />
   );
 }

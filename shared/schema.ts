@@ -6,6 +6,8 @@ export const exerciseSchema = z.object({
   name: z.string(),
   duration: z.string(),
   instructions: z.string(),
+  category: z.enum(["Andning", "Rörelse", "Meditation"]).optional(),
 });
 
 export type Exercise = z.infer<typeof exerciseSchema>;
+export type ExerciseCategory = "Andning" | "Rörelse" | "Meditation";

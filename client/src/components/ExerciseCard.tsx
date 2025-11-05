@@ -24,12 +24,20 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
   }, [exercise.id]);
 
   const handleFavoriteClick = () => {
+    // Haptic feedback for mobile
+    if ('vibrate' in navigator) {
+      navigator.vibrate(10); // Subtle 10ms vibration
+    }
     const newState = toggleFavorite(exercise.id);
     setFavorited(newState);
     onFavoriteToggle();
   };
 
   const handleCompletionClick = () => {
+    // Haptic feedback for mobile
+    if ('vibrate' in navigator) {
+      navigator.vibrate(10); // Subtle 10ms vibration
+    }
     const newState = toggleCompleted(exercise.id);
     setCompleted(newState);
     onCompletionToggle();
@@ -131,9 +139,12 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
       {/* Content Container */}
       <div className="flex-1 flex flex-col items-center justify-start space-y-6">
         {/* Exercise Name */}
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground leading-tight" data-testid={`text-exercise-name-${exercise.id}`}>
-          {exercise.name}
-        </h2>
+        <div className="mb-2">
+          <h2 className="text-4xl font-bold text-center text-foreground leading-tight pb-2" data-testid={`text-exercise-name-${exercise.id}`}>
+            {exercise.name}
+          </h2>
+          <div className="w-16 h-1 bg-accent/50 rounded-full mx-auto mt-3"></div>
+        </div>
 
         {/* Timer */}
         {exercise.duration && (
@@ -142,7 +153,7 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
 
         {/* Instructions */}
         <div className="w-full max-w-2xl">
-          <p className="text-base md:text-lg text-foreground leading-relaxed whitespace-pre-line" data-testid={`text-instructions-${exercise.id}`}>
+          <p className="text-base md:text-lg text-foreground leading-loose whitespace-pre-line" data-testid={`text-instructions-${exercise.id}`}>
             {exercise.instructions}
           </p>
         </div>

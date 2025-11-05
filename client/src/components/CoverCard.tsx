@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Accordion } from "./Accordion";
 import { InstallInstructions } from "./InstallInstructions";
 import { SettingsPanel } from "./SettingsPanel";
+import { Button } from "@/components/ui/button";
 import { Filter, FilterX, CheckCircle2, Settings } from "lucide-react";
 import logoUrl from "@assets/logo_transparent_1762257242802.webp";
 import { getCompletionPercentage } from "@/lib/localStorage";
+import type { ExerciseCategory } from "@shared/schema";
 
 interface CoverCardProps {
   showFavoritesOnly: boolean;
@@ -12,11 +14,16 @@ interface CoverCardProps {
   favoritesCount: number;
   completedCount: number;
   totalExercises: number;
+  selectedCategory: ExerciseCategory | null;
+  onCategorySelect: (category: ExerciseCategory | null) => void;
+  categoryCounts: Record<ExerciseCategory, number>;
 }
 
-export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, completedCount, totalExercises }: CoverCardProps) {
+export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, completedCount, totalExercises, selectedCategory, onCategorySelect, categoryCounts }: CoverCardProps) {
   const completionPercentage = getCompletionPercentage(totalExercises);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const categories: ExerciseCategory[] = ["Andning", "Rörelse", "Meditation"];
   
   return (
     <>
@@ -42,7 +49,7 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
       </div>
 
       {/* Welcome Text */}
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-foreground leading-tight max-w-md">
+      <h1 className="text-4xl font-bold text-center text-foreground leading-tight max-w-md">
         Välkommen till Verktygslådan för mindfulnessguider
       </h1>
 
@@ -59,39 +66,66 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
         </div>
       )}
 
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap gap-2 items-center justify-center">
+        <Button
+          onClick={() => onCategorySelect(null)}
+          variant={selectedCategory === null ? "default" : "secondary"}
+          size="sm"
+          className="rounded-full"
+          data-testid="button-category-all"
+        >
+          Alla ({totalExercises})
+        </Button>
+        {categories.map((category) => (
+          <Button
+            key={category}
+            onClick={() => onCategorySelect(category)}
+            variant={selectedCategory === category ? "default" : "secondary"}
+            size="sm"
+            className="rounded-full"
+            data-testid={`button-category-${category.toLowerCase()}`}
+          >
+            {category} ({categoryCounts[category] || 0})
+          </Button>
+        ))}
+      </div>
+
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 items-center">
         {/* Favorites Filter Button */}
         {favoritesCount > 0 && (
-          <button
+          <Button
             onClick={onFilterToggle}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full hover-elevate active-elevate-2 transition-all"
+            variant="default"
+            className="rounded-full"
             data-testid="button-filter-favorites"
           >
             {showFavoritesOnly ? (
               <>
                 <FilterX className="w-5 h-5" />
-                <span className="font-medium">Visa alla övningar</span>
+                <span>Visa alla övningar</span>
               </>
             ) : (
               <>
                 <Filter className="w-5 h-5" />
-                <span className="font-medium">Visa favoriter ({favoritesCount})</span>
+                <span>Visa favoriter ({favoritesCount})</span>
               </>
             )}
-          </button>
+          </Button>
         )}
 
         {/* Settings Button */}
-        <button
+        <Button
           onClick={() => setIsSettingsOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-full hover-elevate active-elevate-2 transition-all"
+          variant="secondary"
+          className="rounded-full"
           aria-label="Inställningar"
           data-testid="button-open-settings"
         >
           <Settings className="w-5 h-5" />
-          <span className="font-medium">Inställningar</span>
-        </button>
+          <span>Inställningar</span>
+        </Button>
       </div>
 
       {/* Installation Instructions Accordion */}

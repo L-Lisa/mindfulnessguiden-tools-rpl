@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import type { Exercise } from "@shared/schema";
+import type { Exercise, ExerciseCategory } from "@shared/schema";
 import { CoverCard } from "./CoverCard";
 import { ExerciseCard } from "./ExerciseCard";
 import { NavigationArrows } from "./NavigationArrows";
@@ -14,9 +14,12 @@ interface CardContainerProps {
   onCompletionToggle: () => void;
   completedCount: number;
   totalExercises: number;
+  selectedCategory: ExerciseCategory | null;
+  onCategorySelect: (category: ExerciseCategory | null) => void;
+  categoryCounts: Record<ExerciseCategory, number>;
 }
 
-export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, onFilterToggle, favoritesCount, onCompletionToggle, completedCount, totalExercises }: CardContainerProps) {
+export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, onFilterToggle, favoritesCount, onCompletionToggle, completedCount, totalExercises, selectedCategory, onCategorySelect, categoryCounts }: CardContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -62,12 +65,11 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
     };
   }, [exercises]); // Re-run when exercises load
   
-  // Clamp currentIndex when exercises array changes (e.g., filtering favorites)
+  // Reset to CoverCard when exercises array changes (e.g., category/favorite filtering)
+  // This prevents blank screens when the current exercise is no longer in the filtered list
   useEffect(() => {
-    if (currentIndex >= totalCards) {
-      setCurrentIndex(Math.max(0, totalCards - 1));
-    }
-  }, [totalCards, currentIndex]);
+    setCurrentIndex(0); // Always reset to CoverCard when filter changes
+  }, [exercises.length]); // Trigger on exercises count change
 
   // Minimum swipe distance (in px)
   const minSwipeDistance = 50;
@@ -172,6 +174,9 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
           favoritesCount={favoritesCount}
           completedCount={completedCount}
           totalExercises={totalExercises}
+          selectedCategory={selectedCategory}
+          onCategorySelect={onCategorySelect}
+          categoryCounts={categoryCounts}
         />
       );
     } else {
@@ -185,6 +190,9 @@ export function CardContainer({ exercises, onFavoriteToggle, showFavoritesOnly, 
             favoritesCount={favoritesCount}
             completedCount={completedCount}
             totalExercises={totalExercises}
+            selectedCategory={selectedCategory}
+            onCategorySelect={onCategorySelect}
+            categoryCounts={categoryCounts}
           />
         );
       }
