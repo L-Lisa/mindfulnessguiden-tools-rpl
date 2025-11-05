@@ -27,6 +27,13 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
   
   return (
     <>
+      {/* PRE-MVP Badge */}
+      <div className="absolute top-4 right-4 z-10">
+        <div className="px-3 py-1.5 bg-primary text-primary-foreground text-xs font-semibold rounded-full border-2 border-primary-border shadow-lg">
+          PRE-MVP-VERSION
+        </div>
+      </div>
+
       <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 space-y-8">
       {/* Website Link */}
       <a
@@ -50,7 +57,7 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
 
       {/* Welcome Text */}
       <h1 className="text-4xl font-bold text-center text-foreground leading-tight max-w-md">
-        Välkommen till Verktygslådan för mindfulnessguider
+        Välkommen till Verktygslådan för dig som vill ha mer mindfulness i vardagen
       </h1>
 
       {/* Completion Progress */}

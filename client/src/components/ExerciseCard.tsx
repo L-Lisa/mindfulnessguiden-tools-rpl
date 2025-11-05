@@ -76,6 +76,13 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
 
   return (
     <div className="flex flex-col min-h-[70vh] p-6 relative">
+      {/* PRE-MVP Badge */}
+      <div className="absolute top-4 right-4 z-20">
+        <div className="px-3 py-1.5 bg-primary text-primary-foreground text-xs font-semibold rounded-full border-2 border-primary-border shadow-lg">
+          PRE-MVP-VERSION
+        </div>
+      </div>
+
       {/* Top Row: Action Buttons + Watermark/Badge */}
       <div className="sticky top-0 left-0 right-0 flex items-center justify-between mb-4">
         {/* Action Buttons - Left side */}
