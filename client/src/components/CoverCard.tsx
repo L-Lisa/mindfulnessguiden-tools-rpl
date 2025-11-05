@@ -30,7 +30,7 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
       {/* Diagonal Watermark - BETA VERSION */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
         <div 
-          className="text-red-600 font-black opacity-5 select-none whitespace-nowrap"
+          className="text-red-600 font-black opacity-[0.07] select-none whitespace-nowrap"
           style={{ 
             fontSize: '6rem', 
             transform: 'rotate(-45deg)',
