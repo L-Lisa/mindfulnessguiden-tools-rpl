@@ -27,14 +27,21 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
   
   return (
     <>
-      {/* PRE-MVP Badge */}
-      <div className="absolute top-4 right-4 z-10">
-        <div className="px-3 py-1.5 bg-primary text-primary-foreground text-xs font-semibold rounded-full border-2 border-primary-border shadow-lg">
-          PRE-MVP-VERSION
+      {/* Diagonal Watermark - BETA VERSION */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
+        <div 
+          className="text-red-600 font-black opacity-10 select-none whitespace-nowrap"
+          style={{ 
+            fontSize: '6rem', 
+            transform: 'rotate(-45deg)',
+            letterSpacing: '0.2em'
+          }}
+        >
+          BETA VERSION
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 space-y-8">
+      <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 space-y-8 relative z-10">
       {/* Website Link */}
       <a
         href="https://mindfulnessguiden.se"
@@ -55,10 +62,15 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
         />
       </div>
 
-      {/* Welcome Text */}
-      <h1 className="text-4xl font-bold text-center text-foreground leading-tight max-w-md">
-        Välkommen till Verktygslådan för dig som vill ha mer mindfulness i vardagen
-      </h1>
+      {/* Welcome Text - Hierarchical */}
+      <div className="text-center max-w-md space-y-3">
+        <h1 className="text-4xl font-bold text-foreground leading-tight">
+          Välkommen till Verktygslådan
+        </h1>
+        <p className="text-lg text-muted-foreground leading-relaxed">
+          för dig som vill ha mer mindfulness i vardagen
+        </p>
+      </div>
 
       {/* Completion Progress */}
       {completedCount > 0 && (
@@ -141,6 +153,25 @@ export function CoverCard({ showFavoritesOnly, onFilterToggle, favoritesCount, c
           <InstallInstructions />
         </Accordion>
       </div>
+
+      {/* Beta Alert Box */}
+      <a
+        href="https://mindfulnessguiden.se"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full max-w-lg px-4 py-3 bg-amber-50 border-2 border-amber-200 rounded-lg text-center hover-elevate active-elevate-2 transition-all group"
+        data-testid="link-beta-alert"
+      >
+        <div className="flex items-center justify-center gap-2 text-amber-800">
+          <span className="text-lg">⚠️</span>
+          <p className="text-sm font-medium">
+            Detta är en testversion som kommer att uppdateras
+          </p>
+        </div>
+        <p className="text-xs text-amber-700 mt-1 group-hover:underline">
+          Läs mer på mindfulnessguiden.se
+        </p>
+      </a>
     </div>
 
     {/* Settings Panel */}

@@ -76,10 +76,17 @@ export function ExerciseCard({ exercise, onFavoriteToggle, onCompletionToggle }:
 
   return (
     <div className="flex flex-col min-h-[70vh] p-6 relative">
-      {/* PRE-MVP Badge */}
-      <div className="absolute top-4 right-4 z-20">
-        <div className="px-3 py-1.5 bg-primary text-primary-foreground text-xs font-semibold rounded-full border-2 border-primary-border shadow-lg">
-          PRE-MVP-VERSION
+      {/* Diagonal Watermark - BETA VERSION */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
+        <div 
+          className="text-red-600 font-black opacity-10 select-none whitespace-nowrap"
+          style={{ 
+            fontSize: '6rem', 
+            transform: 'rotate(-45deg)',
+            letterSpacing: '0.2em'
+          }}
+        >
+          BETA VERSION
         </div>
       </div>
 
