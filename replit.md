@@ -14,24 +14,24 @@ A Progressive Web App providing Swedish mindfulness practitioners with a portabl
 - **Colors**:
   - Primary Navy: #293556 (headers, text, theme color)
   - Lavender: #E6E6FA (accents)
-  - Cream: #F6F4EA (background, cards)
-- **Typography**: Inter/Roboto from Google Fonts
+  - Whiter Cream: hsl(42° 12% 98%) - lightened from 30% to 12% saturation (less fatiguing on mobile)
+- **Typography**: 
+  - Inter/Roboto from Google Fonts
+  - Exercise headings: text-4xl (all breakpoints) with subtle lavender underline
+  - Body text: leading-loose for improved mobile readability
 - **Border Radius**: 16px (iOS-style)
 - **Touch Targets**: Minimum 44x44px (iOS HIG standard)
+- **Haptic Feedback**: 10ms vibration on favorite/completion toggles (mobile only)
 
 ## Features
-1. **Cover Card** - Welcome screen with logo, website link, and installation instructions accordion
+1. **Cover Card** - Welcome screen with logo, website link, installation instructions, and category filter pills
 2. **10 Exercise Cards** - Validated MBSR/MBCT mindfulness exercises in Swedish:
-   - Bodyscan meditation
-   - Sittande meditation (Sitting Meditation)
-   - Medveten promenad (Mindful Walking)
-   - Kärleksfull vänlighet/Metta (Loving-Kindness)
-   - RAIN-tekniken (RAIN Technique)
-   - Tre minuters andningsrum (Three-Minute Breathing Space)
-   - Medvetet ätande (Mindful Eating)
-   - Medveten rörelse (Mindful Movement)
-   - Andningsmedvetenhet (Breath Awareness)
-   - Ljudmeditation (Sound Meditation)
+   - **Andning (Breathing)**: Tre minuters andningsrum, Andningsmedvetenhet
+   - **Rörelse (Movement)**: Bodyscan meditation, Medveten promenad, Medveten rörelse
+   - **Meditation**: Sittande meditation, Kärleksfull vänlighet/Metta, RAIN-tekniken, Medvetet ätande, Ljudmeditation
+3. **Category Filtering** - Quick-filter pills on CoverCard (Andning, Rörelse, Meditation) using shadcn Button components
+4. **Favorites System** - Mark exercises as favorites with haptic feedback
+5. **Completion Tracking** - Track completed exercises with progress indicator
 
 ## Navigation
 - **Swipe Gestures**: Left/Right swipe on mobile
@@ -83,7 +83,21 @@ shared/
 ## Running the Project
 The workflow "Start application" runs `npm run dev` which starts the Vite development server on port 5000.
 
-## Recent Critical Fixes (November 2025)
+## Recent Enhancements (November 2025)
+
+### UX Improvements (Latest)
+1. **Visual Hierarchy**: Upgraded exercise headings to text-4xl (all breakpoints) with subtle lavender underline (w-16 h-1 bg-accent/50) for better scanability
+2. **Readability**: Increased line-height from leading-relaxed to leading-loose in exercise instructions for easier mobile reading
+3. **Haptic Feedback**: Added 10ms vibration on favorite/completion toggles for native app feel (feature-detected)
+4. **Category Filtering**: 
+   - Added category field to all exercises ("Andning", "Rörelse", "Meditation")
+   - Implemented filter pills on CoverCard with shadcn Button components
+   - Smart filter reset prevents blank screens when switching categories
+   - Works together with favorites filter
+
+### Background Color Lightening
+**Change:** Reduced background saturation from 30% to 12% (hsl(42° 12% 98%)) while maintaining warm hue.
+**Reason:** Less fatiguing on mobile, fresher appearance for long reading sessions.
 
 ### Safari <11.1 Compatibility Fix
 **Problem:** White screen on older Safari (iOS <11.3) caused by `env(safe-area-inset-*)` CSS function crashing the CSS parser.
